@@ -1,0 +1,118 @@
+<div class="-m-6 flex max-h-[calc(100vh-128px)] flex-auto flex-col">
+    <!-- Header -->
+    <div
+        class="flex h-16 flex-0 items-center justify-between bg-primary pl-6 pr-3 text-on-primary sm:pl-8 sm:pr-5"
+    >
+        <div class="text-lg font-medium">Create</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+    <div class="font-poppins overflow-y-scroll p-8 dark:bg-gray-800">
+        <ng-container *ngIf="courses$ | async as courses">
+            <form [formGroup]="classForm">
+                <div class="flex gap-4">
+                    <mat-form-field class="w-full">
+                        <mat-label>Select Course</mat-label>
+                        <mat-select (selectionChange)="onCourseChange($event)">
+                            <ng-container *ngFor="let course of courses">
+                                <mat-option [value]="course.id">{{
+                                    course.name
+                                }}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div formGroupName="slotCreateModel" class="flex gap-4">
+                    <mat-form-field class="w-full">
+                        <mat-label>Start Date</mat-label>
+                        <input
+                            matInput
+                            [matDatepicker]="startDatePicker"
+                            [formControlName]="'startDate'"
+                        />
+                        <mat-datepicker-toggle
+                            matIconSuffix
+                            [for]="startDatePicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #startDatePicker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="w-full">
+                        <mat-label>Slot Type</mat-label>
+                        <mat-select (selectionChange)="onPackageChange($event)">
+                            <mat-option [value]="'MON_WED_FRI'">
+                                Ngày chẵn
+                            </mat-option>
+                            <mat-option [value]="'TUE_THU_SAT'">
+                                Ngày lẻ
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex gap-4">
+                    <mat-form-field class="w-full">
+                        <mat-label>Name</mat-label>
+                        <input
+                            matInput
+                            placeholder="Name"
+                            [formControlName]="'name'"
+                        />
+                    </mat-form-field>
+                    <mat-form-field class="w-full">
+                        <mat-label>Slot Start Time</mat-label>
+                        <input
+                            matInput
+                            type="time"
+                            value="00:00:00"
+                            placeholder="Slot Start Time"
+                            [formControlName]="'from'"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Description</mat-label>
+                    <textarea
+                        matInput
+                        placeholder="Name"
+                        [formControlName]="'description'"
+                    ></textarea>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Select Trainer</mat-label>
+                    <mat-select (selectionChange)="onTrainerChange($event)">
+                        <ng-container *ngIf="trainers$ | async as trainers">
+                            <ng-container *ngFor="let trainer of trainers">
+                                <mat-option [value]="trainer.id">
+                                    <div class="flex gap-3">
+                                        <div>
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:academic-cap"
+                                            ></mat-icon>
+                                        </div>
+                                        <div>
+                                            {{ trainer.name }}
+                                        </div>
+                                    </div>
+                                </mat-option>
+                            </ng-container>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <button
+                    mat-raised-button
+                    class="flex min-w-fit gap-2"
+                    color="primary"
+                    (click)="createClass()"
+                >
+                    <mat-icon svgIcon="heroicons_outline:inbox"></mat-icon>
+                    <span> Create </span>
+                </button>
+            </form>
+        </ng-container>
+    </div>
+</div>

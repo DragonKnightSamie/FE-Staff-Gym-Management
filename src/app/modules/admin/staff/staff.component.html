@@ -1,0 +1,190 @@
+<div
+    class="bg-card flex min-w-0 flex-auto flex-col dark:bg-transparent sm:absolute sm:inset-0 sm:overflow-hidden"
+>
+    <!-- Header -->
+    <div
+        class="relative flex flex-0 flex-col border-b px-6 py-8 sm:flex-row sm:items-center sm:justify-between md:px-8"
+    >
+        <!-- Loader -->
+        @if (isLoading) {
+            <div class="absolute inset-x-0 bottom-0">
+                <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+            </div>
+        }
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Staffs</div>
+        <!-- Actions -->
+        <div class="mt-6 flex shrink-0 items-center gap-3 sm:ml-4 sm:mt-0">
+            <button
+                (click)="openCreateStaffDialog()"
+                mat-raised-button
+                class="flex min-w-fit gap-2"
+                color="primary"
+            >
+                <mat-icon svgIcon="heroicons_outline:inbox"></mat-icon>
+                <span> Create </span>
+            </button>
+
+            <div class="flex gap-3" [formGroup]="filterForm">
+                <div>
+                    <!-- Search -->
+                    <mat-form-field
+                        class="fuse-mat-dense fuse-mat-rounded min-w-64"
+                        [subscriptSizing]="'dynamic'"
+                    >
+                        <mat-icon
+                            class="icon-size-5"
+                            matPrefix
+                            [svgIcon]="'heroicons_solid:magnifying-glass'"
+                        ></mat-icon>
+                        <input
+                            matInput
+                            [formControlName]="'search'"
+                            [autocomplete]="'off'"
+                            [placeholder]="'Search'"
+                        />
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staffs list -->
+    <div
+        appHorizontalScroll
+        class="flex flex-auto flex-col overflow-scroll sm:mb-18"
+    >
+        <ng-container *ngIf="staffs$ | async as staffs">
+            <div class="grid">
+                <!-- Header -->
+                <div
+                    class="staff-grid text-secondary sticky top-0 z-10 grid gap-4 bg-gray-50 px-6 py-4 text-md font-semibold shadow dark:bg-black dark:bg-opacity-5 md:px-8"
+                    matSort
+                    matSortDisableClear
+                >
+                    <div class="hidden sm:block">Action</div>
+                    <div class="hidden sm:block">Avatar</div>
+                    <div class="hidden sm:block">Name</div>
+                    <div class="hidden sm:block">Email</div>
+                    <div class="hidden sm:block">Phone</div>
+                    <div class="hidden sm:block">CreateAt</div>
+                    <div class="hidden sm:block">Status</div>
+                </div>
+                <!-- Rows -->
+                <ng-container *ngIf="staffs$ | async as staffs">
+                    <ng-container
+                        *ngFor="let staff of staffs; trackBy: trackByFn"
+                    >
+                        <div
+                            class="staff-grid grid items-center gap-4 border-b px-6 py-3 md:px-8"
+                        >
+                            <!-- Phone -->
+                            <div class="hidden sm:block">
+                                <div class="flex gap-3">
+                                    <span
+                                        (click)="
+                                            openStaffDetailDialog(staff.id)
+                                        "
+                                    >
+                                        <mat-icon
+                                            class="cursor-pointer text-blue-500 icon-size-5"
+                                            [svgIcon]="
+                                                'heroicons_outline:pencil-square'
+                                            "
+                                        ></mat-icon>
+                                    </span>
+
+                                    <span>
+                                        <mat-icon
+                                            class="cursor-pointer text-red-500 icon-size-5"
+                                            [svgIcon]="
+                                                'heroicons_outline:trash'
+                                            "
+                                        ></mat-icon>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <div
+                                    class="relative mr-6 flex h-12 w-12 flex-0 items-center justify-center overflow-hidden rounded border"
+                                >
+                                    <img
+                                        class="w-8"
+                                        *ngIf="staff.avatarUrl"
+                                        [alt]="'Staff image'"
+                                        [src]="staff.avatarUrl"
+                                    />
+                                    <div
+                                        class="flex h-full w-full items-center justify-center text-center text-xs font-semibold uppercase leading-none"
+                                        *ngIf="!staff.avatarUrl"
+                                    >
+                                        NO THUMB
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="hidden truncate sm:block">
+                                {{ staff.name }}
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="hidden sm:block">
+                                {{ staff.email }}
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="hidden sm:block">
+                                {{ staff.phone }}
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="hidden sm:block">
+                                {{ staff.createAt | date: 'dd/MM/YYYY' }}
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="hidden sm:block">
+                                {{ staff.status }}
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <mat-paginator
+                class="z-10 border-b bg-gray-50 dark:bg-transparent sm:absolute sm:inset-x-0 sm:bottom-0 sm:border-b-0 sm:border-t"
+                [ngClass]="{ 'pointer-events-none': isLoading }"
+                [length]="pagination.totalRow"
+                [pageIndex]="pagination.pageNumber"
+                [pageSize]="pagination.pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                [showFirstLastButtons]="true"
+            >
+            </mat-paginator>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Notification -->
+<a class="cursor-pointer" *ngIf="flashMessage">
+    <fuse-alert
+        class="absolute bottom-0 right-0 z-999"
+        [type]="'success'"
+        [appearance]="'border'"
+        *ngIf="flashMessage === 'success'"
+    >
+        <span fuseAlertTitle>Success</span>
+        {{ message }}
+    </fuse-alert>
+    <fuse-alert
+        class="absolute bottom-0 right-0 z-999"
+        [type]="'error'"
+        [appearance]="'border'"
+        *ngIf="flashMessage === 'error'"
+    >
+        <span fuseAlertTitle>Error</span>
+        {{ message }}
+    </fuse-alert>
+</a>

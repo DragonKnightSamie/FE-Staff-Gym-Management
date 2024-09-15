@@ -1,0 +1,119 @@
+<div class="-m-6 flex max-h-[calc(100vh-128px)] flex-auto flex-col">
+    <!-- Header -->
+    <div
+        class="flex h-16 flex-0 items-center justify-between bg-primary pl-6 pr-3 text-on-primary sm:pl-8 sm:pr-5"
+    >
+        <div class="text-lg font-medium">Members</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+    <div class="font-poppins overflow-y-scroll p-8 dark:bg-gray-800">
+        <div class="flex flex-col gap-4">
+            <ng-container *ngIf="classMembers$ | async as classMembers">
+                <ng-container *ngIf="classMembers.length > 0">
+                    <div>
+                        <h3>Member ({{ classMembers.length }})</h3>
+                        <ng-container *ngFor="let classMember of classMembers">
+                            <fuse-card
+                                class="filter-info flex w-full max-w-80 items-center p-6"
+                            >
+                                <img
+                                    class="mr-6 h-16 w-16 rounded-full"
+                                    [src]="
+                                        classMember.member.avatarUrl ||
+                                        environment.defaultAvatar
+                                    "
+                                    alt="Card cover image"
+                                />
+                                <div class="flex flex-col">
+                                    <div
+                                        class="text-2xl font-semibold leading-tight"
+                                    >
+                                        Brian Hughes
+                                    </div>
+                                    <div
+                                        class="text-md leading-tight text-primary"
+                                    >
+                                        Head of HR Department
+                                    </div>
+                                    <div class="text-secondary mt-2 text-md">
+                                        h.brian&#64;company.com
+                                    </div>
+                                </div>
+                            </fuse-card>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="wishlists$ | async as wishlists">
+                <ng-container *ngIf="wishlists.length > 0">
+                    <div>
+                        <h3>Wishlist ({{ wishlists.length }})</h3>
+                        <ng-container *ngFor="let wishlist of wishlists">
+                            <fuse-card
+                                class="filter-info flex w-full max-w-80 flex-col gap-3 px-6 py-3"
+                            >
+                                <div class="flex">
+                                    <img
+                                        class="mr-6 h-16 w-16 rounded-full"
+                                        [src]="
+                                            wishlist.member.avatarUrl ||
+                                            environment.defaultAvatar
+                                        "
+                                        alt="Card cover image"
+                                    />
+                                    <div class="flex flex-col">
+                                        <div
+                                            class="text-2xl font-semibold leading-tight"
+                                        >
+                                            {{ wishlist.member.name }}
+                                        </div>
+                                        <div
+                                            class="text-md leading-tight text-primary"
+                                        >
+                                            {{ wishlist.member.email }}
+                                        </div>
+                                        <div
+                                            class="text-secondary mt-2 text-md"
+                                        >
+                                            {{ wishlist.member.phone }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex w-full gap-3">
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        class="w-full"
+                                        (click)="
+                                            addMember(
+                                                wishlist.member.id,
+                                                wishlist.id
+                                            )
+                                        "
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        mat-raised-button
+                                        color="warn"
+                                        class="w-full"
+                                        (click)="
+                                            removeFromWishlist(wishlist.id)
+                                        "
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </fuse-card>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>

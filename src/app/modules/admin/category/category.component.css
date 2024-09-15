@@ -1,0 +1,3 @@
+.category-grid {
+    grid-template-columns: 196px 196px 196px auto  196px;
+}

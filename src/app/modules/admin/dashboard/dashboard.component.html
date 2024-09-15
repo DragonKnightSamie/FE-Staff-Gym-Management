@@ -1,0 +1,237 @@
+<div
+    class="bg-card flex min-w-0 flex-auto flex-col dark:bg-transparent sm:absolute sm:inset-0 sm:overflow-hidden"
+>
+    <!-- Header -->
+    <div
+        class="relative flex flex-0 flex-col border-b px-6 py-8 sm:flex-row sm:items-center sm:justify-between md:px-8"
+    >
+        <!-- Loader -->
+        @if (isLoading) {
+            <div class="absolute inset-x-0 bottom-0">
+                <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+            </div>
+        }
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">Dashboard</div>
+    </div>
+
+    <div
+        class="mt-6 grid w-full grid-cols-1 gap-8 px-6 sm:grid-cols-2 md:mt-8 md:px-8 lg:grid-cols-3"
+    >
+        <!-- New vs. Returning -->
+        <div
+            class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
+        >
+            <div class="flex items-start justify-between">
+                <div
+                    class="truncate text-lg font-medium leading-6 tracking-tight"
+                >
+                    New vs. Returning
+                </div>
+                <!-- <div class="ml-2">
+                    <button
+                        class="bg-hover h-6 min-h-6 rounded-full px-2"
+                        mat-button
+                        [matMenuTriggerFor]="conversionMenu"
+                    >
+                        <span class="text-secondary text-sm font-medium"
+                            >30 days</span
+                        >
+                    </button>
+                    <mat-menu #conversionMenu="matMenu">
+                        <button mat-menu-item>30 days</button>
+                        <button mat-menu-item>3 months</button>
+                        <button mat-menu-item>9 months</button>
+                    </mat-menu>
+                </div> -->
+            </div>
+            <div class="mt-6 flex h-44 flex-auto flex-col">
+                <apx-chart
+                    class="flex h-full w-full flex-auto items-center justify-center"
+                    [chart]="chartNewVsReturning.chart"
+                    [colors]="chartNewVsReturning.colors"
+                    [labels]="chartNewVsReturning.labels"
+                    [plotOptions]="chartNewVsReturning.plotOptions"
+                    [series]="chartNewVsReturning.series"
+                    [states]="chartNewVsReturning.states"
+                    [tooltip]="chartNewVsReturning.tooltip"
+                ></apx-chart>
+            </div>
+            <div class="mt-8">
+                <div class="-my-3 divide-y">
+                    <ng-container
+                        *ngFor="
+                            let dataset of data.newVsReturning.series;
+                            let i = index
+                        "
+                    >
+                        <div class="grid grid-cols-3 py-3">
+                            <div class="flex items-center">
+                                <div
+                                    class="h-2 w-2 flex-0 rounded-full"
+                                    [style.backgroundColor]="
+                                        chartNewVsReturning.colors[i]
+                                    "
+                                ></div>
+                                <div class="ml-3 truncate">
+                                    {{ data.newVsReturning.labels[i] }}
+                                </div>
+                            </div>
+                            <div class="text-right font-medium">
+                                {{
+                                    (data.newVsReturning.uniqueVisitors *
+                                        dataset) /
+                                        100 | number: '1.0-0'
+                                }}
+                            </div>
+                            <div class="text-secondary text-right">
+                                {{ dataset }}%
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <!-- Gender -->
+        <div
+            class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
+        >
+            <div class="flex items-start justify-between">
+                <div
+                    class="truncate text-lg font-medium leading-6 tracking-tight"
+                >
+                    Gender
+                </div>
+                <!-- <div class="ml-2">
+                    <button
+                        class="bg-hover h-6 min-h-6 rounded-full px-2"
+                        mat-button
+                        [matMenuTriggerFor]="conversionMenu"
+                    >
+                        <span class="text-secondary text-sm font-medium"
+                            >30 days</span
+                        >
+                    </button>
+                    <mat-menu #conversionMenu="matMenu">
+                        <button mat-menu-item>30 days</button>
+                        <button mat-menu-item>3 months</button>
+                        <button mat-menu-item>9 months</button>
+                    </mat-menu>
+                </div> -->
+            </div>
+            <div class="mt-6 flex h-44 flex-auto flex-col">
+                <apx-chart
+                    class="flex h-full w-full flex-auto items-center justify-center"
+                    [chart]="chartGender.chart"
+                    [colors]="chartGender.colors"
+                    [labels]="chartGender.labels"
+                    [plotOptions]="chartGender.plotOptions"
+                    [series]="chartGender.series"
+                    [states]="chartGender.states"
+                    [tooltip]="chartGender.tooltip"
+                ></apx-chart>
+            </div>
+            <div class="mt-8">
+                <div class="-my-3 divide-y">
+                    <ng-container
+                        *ngFor="
+                            let dataset of data.gender.series;
+                            let i = index
+                        "
+                    >
+                        <div class="grid grid-cols-3 py-3">
+                            <div class="flex items-center">
+                                <div
+                                    class="h-2 w-2 flex-0 rounded-full"
+                                    [style.backgroundColor]="
+                                        chartGender.colors[i]
+                                    "
+                                ></div>
+                                <div class="ml-3 truncate">
+                                    {{ data.gender.labels[i] }}
+                                </div>
+                            </div>
+                            <div class="text-right font-medium">
+                                {{
+                                    (data.gender.uniqueVisitors * dataset) / 100
+                                        | number: '1.0-0'
+                                }}
+                            </div>
+                            <div class="text-secondary text-right">
+                                {{ dataset }}%
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <!-- Age -->
+        <div
+            class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
+        >
+            <div class="flex items-start justify-between">
+                <div
+                    class="truncate text-lg font-medium leading-6 tracking-tight"
+                >
+                    Age
+                </div>
+                <!-- <div class="ml-2">
+                    <button
+                        class="bg-hover h-6 min-h-6 rounded-full px-2"
+                        mat-button
+                        [matMenuTriggerFor]="conversionMenu"
+                    >
+                        <span class="text-secondary text-sm font-medium"
+                            >30 days</span
+                        >
+                    </button>
+                    <mat-menu #conversionMenu="matMenu">
+                        <button mat-menu-item>30 days</button>
+                        <button mat-menu-item>3 months</button>
+                        <button mat-menu-item>9 months</button>
+                    </mat-menu>
+                </div> -->
+            </div>
+            <div class="mt-6 flex h-44 flex-auto flex-col">
+                <apx-chart
+                    class="flex h-full w-full flex-auto items-center justify-center"
+                    [chart]="chartAge.chart"
+                    [colors]="chartAge.colors"
+                    [labels]="chartAge.labels"
+                    [plotOptions]="chartAge.plotOptions"
+                    [series]="chartAge.series"
+                    [states]="chartAge.states"
+                    [tooltip]="chartAge.tooltip"
+                ></apx-chart>
+            </div>
+            <div class="mt-8">
+                <div class="-my-3 divide-y">
+                    <ng-container
+                        *ngFor="let dataset of data.age.series; let i = index"
+                    >
+                        <div class="grid grid-cols-3 py-3">
+                            <div class="flex items-center">
+                                <div
+                                    class="h-2 w-2 flex-0 rounded-full"
+                                    [style.backgroundColor]="chartAge.colors[i]"
+                                ></div>
+                                <div class="ml-3 truncate">
+                                    {{ data.age.labels[i] }}
+                                </div>
+                            </div>
+                            <div class="text-right font-medium">
+                                {{
+                                    (data.age.uniqueVisitors * dataset) / 100
+                                        | number: '1.0-0'
+                                }}
+                            </div>
+                            <div class="text-secondary text-right">
+                                {{ dataset }}%
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

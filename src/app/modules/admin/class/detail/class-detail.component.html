@@ -1,0 +1,179 @@
+<ng-container *ngIf="calendarOptions">
+    <div class="flex w-full p-8">
+        <div class="grid w-full grid-cols-5 gap-4">
+            <div class="col-span-2">
+                <ng-container *ngIf="class$ | async as class">
+                    <div class="flex h-full flex-col gap-4">
+                        <fuse-card
+                            class="filter-info flex w-full items-center rounded-lg p-6"
+                        >
+                            <img
+                                class="mr-6 h-16 w-16 rounded-full"
+                                [src]="class.trainer.avatarUrl"
+                                alt="Card cover image"
+                            />
+                            <div class="flex flex-col gap-2">
+                                <div class="text-md leading-tight text-primary">
+                                    Trainer
+                                </div>
+                                <div
+                                    class="text-2xl font-semibold leading-tight"
+                                >
+                                    {{ class.trainer.name }}
+                                </div>
+                                <div class="text-secondary text-md">
+                                    {{ class.trainer.email }}
+                                </div>
+                            </div>
+                        </fuse-card>
+                        <fuse-card
+                            class="filter-info flex h-full w-full flex-col p-6"
+                        >
+                            <ng-container *ngIf="course$ | async as course">
+                                <div class="flex h-32">
+                                    <img
+                                        class="rounded-lg object-cover"
+                                        [src]="course.thumbnailUrl"
+                                        alt="Card cover image"
+                                    />
+                                </div>
+                            </ng-container>
+                            <div class="flex px-8">
+                                <div class="bg-card -mt-12 rounded-full p-1">
+                                    <img
+                                        class="h-24 w-24 rounded-full"
+                                        [src]="class.trainer.avatarUrl"
+                                        alt="Card cover image"
+                                    />
+                                </div>
+                            </div>
+                            <form [formGroup]="classForm" class="h-full">
+                                <div class="mt-6 flex h-full flex-col">
+                                    <div class="flex gap-4">
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Name</mat-label>
+                                            <input
+                                                matInput
+                                                class="bg-none"
+                                                [formControlName]="'name'"
+                                                placeholder="Title of the class"
+                                            />
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Status</mat-label>
+                                            <mat-select
+                                                (selectionChange)="
+                                                    onStatusChange($event)
+                                                "
+                                                [(value)]="class.status"
+                                            >
+                                                <mat-option [value]="'Active'"
+                                                    >Active</mat-option
+                                                >
+                                                <mat-option [value]="'Unactive'"
+                                                    >Unactive</mat-option
+                                                >
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Start Time</mat-label>
+                                            <input
+                                                matInput
+                                                [matDatepicker]="
+                                                    startTimePicker
+                                                "
+                                                [formControlName]="'from'"
+                                            />
+                                            <mat-datepicker-toggle
+                                                matIconSuffix
+                                                [for]="startTimePicker"
+                                            ></mat-datepicker-toggle>
+                                            <mat-datepicker
+                                                #startTimePicker
+                                            ></mat-datepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full">
+                                            <mat-label>End Time</mat-label>
+                                            <input
+                                                matInput
+                                                [matDatepicker]="endTimePicker"
+                                                [formControlName]="'to'"
+                                            />
+                                            <mat-datepicker-toggle
+                                                matIconSuffix
+                                                [for]="endTimePicker"
+                                            ></mat-datepicker-toggle>
+                                            <mat-datepicker
+                                                #endTimePicker
+                                            ></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Lesson Count</mat-label>
+                                            <input
+                                                matInput
+                                                type="number"
+                                                class="bg-none"
+                                                [formControlName]="
+                                                    'lessonCount'
+                                                "
+                                                placeholder="Time"
+                                            />
+                                        </mat-form-field>
+                                        <mat-form-field class="w-full">
+                                            <mat-label>Total Lessons</mat-label>
+                                            <input
+                                                matInput
+                                                type="number"
+                                                class="bg-none"
+                                                [formControlName]="
+                                                    'totalLesson'
+                                                "
+                                                placeholder="Time"
+                                            />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="flex w-full justify-end gap-4">
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            class="flex w-full min-w-fit gap-2"
+                                            (click)="viewMember()"
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:inbox"
+                                            ></mat-icon>
+                                            <span> Members </span>
+                                        </button>
+                                        <button
+                                            mat-raised-button
+                                            color="accent"
+                                            class="flex w-full min-w-fit gap-2"
+                                            (click)="updateClass()"
+                                        >
+                                            <mat-icon
+                                                svgIcon="heroicons_outline:inbox"
+                                            ></mat-icon>
+                                            <span> Update </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </fuse-card>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="col-span-3">
+                <fuse-card class="h-full w-full rounded-lg p-6">
+                    <full-calendar
+                        class="w-full"
+                        [options]="calendarOptions"
+                    ></full-calendar>
+                </fuse-card>
+            </div>
+        </div>
+    </div>
+</ng-container>

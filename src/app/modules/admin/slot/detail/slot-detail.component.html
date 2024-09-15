@@ -1,0 +1,65 @@
+<div class="-m-6 flex max-h-[calc(100vh-128px)] flex-auto flex-col">
+    <!-- Header -->
+    <div
+        class="flex h-16 flex-0 items-center justify-between bg-primary pl-6 pr-3 text-on-primary sm:pl-8 sm:pr-5"
+    >
+        <div class="text-lg font-medium">Slot</div>
+        <button mat-icon-button (click)="matDialogRef.close()" [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"
+            ></mat-icon>
+        </button>
+    </div>
+    <div class="font-poppins overflow-y-scroll p-8 dark:bg-gray-800">
+        <ng-container *ngIf="slots$ | async as slot">
+            <ng-container *ngIf="slotUpdateForm">
+                <form [formGroup]="slotUpdateForm">
+                    <mat-form-field class="w-full">
+                        <mat-label>Name</mat-label>
+                        <input
+                            matInput
+                            placeholder="Name"
+                            [formControlName]="'name'"
+                        />
+                    </mat-form-field>
+                    <div class="flex gap-4">
+                        <mat-form-field class="w-full">
+                            <mat-label>Start Time</mat-label>
+                            <input
+                                matInput
+                                type="datetime-local"
+                                class="bg-none"
+                                [formControlName]="'startTime'"
+                                placeholder="Start time"
+                            />
+                        </mat-form-field>
+                        <mat-form-field class="w-full">
+                            <mat-label>End Time</mat-label>
+                            <input
+                                matInput
+                                type="datetime-local"
+                                class="bg-none"
+                                [formControlName]="'endTime'"
+                                placeholder="End time"
+                            />
+                        </mat-form-field>
+                    </div>
+                    <div class="flex justify-end">
+                        <button
+                            (click)="updateSlot(slot.id)"
+                            mat-raised-button
+                            color="primary"
+                            class="flex min-w-fit gap-2"
+                        >
+                            <mat-icon
+                                svgIcon="heroicons_outline:inbox"
+                            ></mat-icon>
+                            <span> Update </span>
+                        </button>
+                    </div>
+                </form>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
